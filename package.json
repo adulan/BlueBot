@@ -1,0 +1,25 @@
+{
+  "name": "@adulan/bluebot",
+  "version": "1.0.0",
+  "description": "Discord Bot that enforces the Blue and punishes the Red",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adulan/BlueBot.git"
+  },
+  "keywords": [
+    "BLUE"
+  ],
+  "author": "adulan",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/adulan/BlueBot/issues"
+  },
+  "homepage": "https://github.com/adulan/BlueBot#readme",
+  "publishConfig": {
+    "@adulan:registry": "https://ghcr.io"
+  }
+}
