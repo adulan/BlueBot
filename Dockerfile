@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "python3", "./always_blue.py" ]
+CMD [ "python3", "./src/always_blue.py" ]

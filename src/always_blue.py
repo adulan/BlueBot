@@ -6,9 +6,8 @@ import asyncio, os, datetime
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
-
-# Define the Discord client
 client = discord.Client(intents=intents)
+
 poll = polls.Poll(client)
 
 

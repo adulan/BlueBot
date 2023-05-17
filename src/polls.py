@@ -58,7 +58,7 @@ class Poll:
             print(emoji)
             print(f"Created new emoji {emoji.name}")
         except discord.HTTPException as e:
-            print("Unable to create emoji" + e.text + str(e.code))
+            print("Unable to create emoji" + e.text + " - " + str(e.code))
             return False
         return emoji
 
