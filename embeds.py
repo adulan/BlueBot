@@ -1,27 +1,23 @@
 import discord
 import requests
+import utils
 
 
 class Embeds:
 
-    _LINK_URL = "https://coolors.co/"
-    _COLOR_API_URL = "https://www.thecolorapi.com/id?hex="
-    _COLOR_IMG_API_URL = "https://singlecolorimage.com/get/"
-
-
     def __init__(self, color):
         self.color = color
-        self.url = self._LINK_URL + self.color[1:]
+        self.url = utils.LINK_URL + self.color[1:]
         self.title = self.get_color_name()
         self.description = self.color
-        self.image = self._COLOR_IMG_API_URL + self.color[1:] + "/400x400"
+        self.image = utils.COLOR_IMG_API_URL + self.color[1:] + "/400x400"
         self.author = "BlueBot"
         self.footer = "Brought to you by Deez Nutz"
         
 
     # A function that makes an API cann to thecolorapi.com to get the color information
     def get_color_name(self):
-        response = requests.get("https://www.thecolorapi.com/id?hex=" + self.color[1:])
+        response = requests.get(utils.COLOR_API_URL + self.color[1:])
         return response.json()["name"]["value"]
     
     # Replace the hex prefix with 0x and convert the hex code to an integer
