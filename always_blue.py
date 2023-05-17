@@ -1,6 +1,6 @@
 import discord
-import embeds, utils
-import os
+import embeds, utils, polls
+import asyncio, os, datetime
 
 # Define the Discord client with intents
 intents = discord.Intents.default()
@@ -9,12 +9,14 @@ intents.message_content = True
 
 # Define the Discord client
 client = discord.Client(intents=intents)
+poll = polls.Poll(client)
 
 
 # Define an event handler for when the client connects to Discord
 @client.event
 async def on_ready():
     print("Logged in as {0.user}.".format(client))
+    print(datetime.datetime.now())
 
 # Define an event handler for when a message is sent in a channel
 @client.event

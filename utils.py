@@ -1,8 +1,9 @@
-import random, re
+import os, random, re
 
 LINK_URL = "https://coolors.co/"
 COLOR_API_URL = "https://www.thecolorapi.com/id?hex="
 COLOR_IMG_API_URL = "https://singlecolorimage.com/get/"
+GUILD_ID = int(os.getenv("GUILD_ID"))
 
 # Define the regular expression pattern to match hexadecimal color codes
 hex_pattern = re.compile(r"#[0-9A-Fa-f]{6}")
