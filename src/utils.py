@@ -1,4 +1,6 @@
 import os, random, re
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 LINK_URL = "https://coolors.co/"
 COLOR_API_URL = "https://www.thecolorapi.com/id?hex="
@@ -45,3 +47,29 @@ def is_not_blue_message():
         "That's not a shade of blue, you nincompoop."
     ]
     return responses[random.randint(0, len(responses) - 1)]
+
+
+def schedule_poll(poll):
+    # Nominations posts Sunday 00:00 EDT
+    # Nominations closes Friday 23:59 EDT
+    # Polls posted Saturday 00:00 EDT = Saturday 04:00 UTC
+    
+    # time values
+    day_of_the_week = "sat"
+    hour = "04"
+    minute = "00"
+
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(poll.post_poll, CronTrigger(day_of_week=day_of_the_week, hour=hour, minute=minute))
+    scheduler.start()
+
+def schedule_poll_result(poll):
+    # Polls close Saturday 23:45 EDT = Sunday 03:45 UTC
+    # time values
+    day_of_the_week = "sun"
+    hour = "03"
+    minute = "45"
+
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(poll.complete_poll, CronTrigger(day_of_week=day_of_the_week, hour=hour, minute=minute))
+    scheduler.start()

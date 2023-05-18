@@ -16,6 +16,8 @@ poll = polls.Poll(client)
 async def on_ready():
     print("Logged in as {0.user}.".format(client))
     print(datetime.datetime.now())
+    utils.schedule_poll(poll)
+    utils.schedule_poll_result(poll)
 
 # Define an event handler for when a message is sent in a channel
 @client.event
