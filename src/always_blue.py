@@ -17,6 +17,7 @@ async def on_ready():
     print("Logged in as {0.user}.".format(client))
     print(datetime.datetime.now())
     utils.schedule_poll(poll)
+    await patch_poll_emoji(poll)
     utils.schedule_poll_result(poll)
 
 # Define an event handler for when a message is sent in a channel
@@ -40,6 +41,22 @@ async def on_message(message):
                 await message.reply(utils.is_not_blue_message())
         except:
             print("Unable to send message")
+
+async def patch_poll_emoji(poll):
+    choices = await poll.get_votes()
+    try:
+        message = await client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).fetch_message(poll.active_poll_id)
+    except discord.HTTPException as e:
+        print("Unable to fetch message" + e.text + " - " + str(e.code))
+        return
+    for choice in choices:
+        emoji = await poll.check_emoji(choice)
+        if not emoji:
+            emoji = await poll.post_emoji(choice, poll.api_url + choice[1:] + "/100x100.png")
+        else:
+            print(f"Found emoji {emoji.name}")
+        if emoji:
+            await message.add_reaction(emoji)
 
 # Run the client with the Discord API token
 client.run(os.environ.get("DISCORD_TOKEN"))

@@ -1,18 +1,17 @@
-import discord, os, urllib
+import discord, time, os, urllib
 import utils
 from datetime import datetime, timedelta
 
 
 # BLUE OF THE WEEK
 BLUE_OF_THE_WEEK = "#71A6D2" # Variable, but too important to be lower case
-BOT_CHANNEL_ID = int(os.getenv("POLL_CHANNEL_ID"))
 
 
 class Poll:
     def __init__(self, client):
         self.title = "Blue of the Week Poll"
         self.api_url = "https://singlecolorimage.com/get/"
-        self.active_poll_id = 0
+        self.active_poll_id = 1109329657804902541
         self.client = client
         self.nominations = []
 
@@ -31,7 +30,8 @@ class Poll:
         for name, value, inline in fields:
             embed.add_field(name=name, value=value, inline=inline)
 
-        message = await self.client.get_guild(utils.GUILD_ID).get_channel(BOT_CHANNEL_ID).send(embed=embed)
+        message = await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
+        await time.sleep(60) # prevent double posting of poll
 
         # add a reaction to the message for each choice
         # check if the emoji already exists in the guild
@@ -79,7 +79,7 @@ class Poll:
     async def get_votes(self):
         votes = []
         guild = self.client.get_guild(utils.GUILD_ID)
-        channel = guild.get_channel(BOT_CHANNEL_ID)
+        channel = guild.get_channel(utils.BOT_CHANNEL_ID)
 
         async for message in channel.history(limit=100):
             if message.author.bot:
@@ -97,7 +97,7 @@ class Poll:
 
     async def complete_poll(self):
         try:
-            channel = self.client.get_guild(utils.GUILD_ID).get_channel(BOT_CHANNEL_ID)
+            channel = self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID)
             message = await channel.fetch_message(self.active_poll_id)
         except discord.HTTPException as e:
             print("Unable to fetch message" + e.text + " - " + str(e.code))
@@ -128,10 +128,12 @@ class Poll:
 
         BLUE_OF_THE_WEEK = hex_code
         try:
-            await self.client.get_guild(utils.GUILD_ID).get_channel(BOT_CHANNEL_ID).send(embed=embed)
+            await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
+            await time.sleep(60)
         except discord.HTTPException as e:
             print("Unable to post result" + e.text + " - " + str(e.code))
         await self.delete_emojis()
+
 
 
     async def delete_emojis(self):

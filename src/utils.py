@@ -6,6 +6,7 @@ LINK_URL = "https://coolors.co/"
 COLOR_API_URL = "https://www.thecolorapi.com/id?hex="
 COLOR_IMG_API_URL = "https://singlecolorimage.com/get/"
 GUILD_ID = int(os.getenv("GUILD_ID"))
+BOT_CHANNEL_ID = int(os.getenv("POLL_CHANNEL_ID"))
 
 # Define the regular expression pattern to match hexadecimal color codes
 hex_pattern = re.compile(r"#[0-9A-Fa-f]{6}")
@@ -62,6 +63,7 @@ def schedule_poll(poll):
     scheduler = AsyncIOScheduler()
     scheduler.add_job(poll.post_poll, CronTrigger(day_of_week=day_of_the_week, hour=hour, minute=minute))
     scheduler.start()
+    
 
 def schedule_poll_result(poll):
     # Polls close Saturday 23:45 EDT = Sunday 03:45 UTC
