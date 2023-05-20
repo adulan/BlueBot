@@ -3,22 +3,18 @@ import utils
 from datetime import datetime, timedelta
 
 
-# BLUE OF THE WEEK
-BLUE_OF_THE_WEEK = "#71A6D2" # Variable, but too important to be lower case
-
-
 class Poll:
     def __init__(self, client):
         self.title = "Blue of the Week Poll"
         self.api_url = "https://singlecolorimage.com/get/"
-        self.active_poll_id = 1109329657804902541
+        self.active_poll_id = 0
         self.client = client
         self.nominations = []
 
     async def post_poll(self):
         embed = discord.Embed(title=self.title,
                         description="Vote for your favorite shade of blue!",
-                        colour=int(BLUE_OF_THE_WEEK.replace("#", "0x"), 16),
+                        colour=int(utils.BLUE_OF_THE_WEEK.replace("#", "0x"), 16),
                         timestamp=datetime.utcnow())
         
         choices = await self.get_votes()
@@ -100,7 +96,7 @@ class Poll:
             channel = self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID)
             message = await channel.fetch_message(self.active_poll_id)
         except discord.HTTPException as e:
-            print("Unable to fetch message" + e.text + " - " + str(e.code))
+            print("Unable to fetch poll" + e.text + " - " + str(e.code))
             return
         message_id = message.id
         
@@ -126,7 +122,7 @@ class Poll:
         embed.set_author(name="BlueBot", url=utils.LINK_URL + hex_code, icon_url=utils.LINK_URL + hex_code)
         embed.set_footer(text="Brought to you by Deez Nutz")
 
-        BLUE_OF_THE_WEEK = hex_code
+        utils.BLUE_OF_THE_WEEK = hex_code
         try:
             await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
             await time.sleep(60)

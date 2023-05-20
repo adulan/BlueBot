@@ -7,6 +7,8 @@ COLOR_API_URL = "https://www.thecolorapi.com/id?hex="
 COLOR_IMG_API_URL = "https://singlecolorimage.com/get/"
 GUILD_ID = int(os.getenv("GUILD_ID"))
 BOT_CHANNEL_ID = int(os.getenv("POLL_CHANNEL_ID"))
+# BLUE OF THE WEEK
+BLUE_OF_THE_WEEK = "#71A6D2" # Variable, but too important to be lower case
 
 # Define the regular expression pattern to match hexadecimal color codes
 hex_pattern = re.compile(r"#[0-9A-Fa-f]{6}")
