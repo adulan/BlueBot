@@ -28,7 +28,7 @@ class Embeds:
     # Initialize the discord EmbedBuilder
     def get_embed(self):
         try:
-            embed = discord.Embed(title=self.title, color=self.get_color_with_hex_prefix(), url=self.url, description=self.description)
+            embed = discord.Embed(title=self.title, color=int(utils.BLUE_OF_THE_WEEK.replace("#", "0x"), 16), url=self.url, description=self.description)
         except TypeError:
             embed = discord.Embed(title=self.title)
             print("Unable to make embed")

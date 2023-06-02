@@ -8,6 +8,12 @@ COLOR_IMG_API_URL = "https://singlecolorimage.com/get/"
 GUILD_ID = int(os.getenv("GUILD_ID"))
 BOT_CHANNEL_ID = int(os.getenv("POLL_CHANNEL_ID"))
 
+# BLUE OF THE WEEK - Variable, but too important to be lower case
+if os.getenv("BOTW") != None:
+    BLUE_OF_THE_WEEK = os.getenv("BOTW")
+else:
+    BLUE_OF_THE_WEEK = "#0000FF"
+
 # Define the regular expression pattern to match hexadecimal color codes
 hex_pattern = re.compile(r"#[0-9A-Fa-f]{6}")
 
@@ -45,7 +51,11 @@ def is_not_blue_message():
         "That's not a shade of blue, you dunce.",
         "That's not a shade of blue, you imbecile.",
         "That's not a shade of blue, you simpleton.",
-        "That's not a shade of blue, you nincompoop."
+        "That's not a shade of blue, you nincompoop.",
+        "That's not a shade of blue, you dolt.",
+        "That's not a shade of blue, you ignoramus.",
+        "That's not a shade of blue, you douchenozzle.",
+        "That's not a shade of blue, you jackass."
     ]
     return responses[random.randint(0, len(responses) - 1)]
 

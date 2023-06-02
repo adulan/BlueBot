@@ -3,49 +3,51 @@ import utils
 from datetime import datetime, timedelta
 
 
-# BLUE OF THE WEEK
-BLUE_OF_THE_WEEK = "#71A6D2" # Variable, but too important to be lower case
-
-
 class Poll:
     def __init__(self, client):
         self.title = "Blue of the Week Poll"
         self.api_url = "https://singlecolorimage.com/get/"
-        self.active_poll_id = 1109329657804902541
+        self.active_poll_id = 0
         self.client = client
         self.nominations = []
+        self.emojis = {}
 
     async def post_poll(self):
         embed = discord.Embed(title=self.title,
                         description="Vote for your favorite shade of blue!",
-                        colour=int(BLUE_OF_THE_WEEK.replace("#", "0x"), 16),
+                        colour=int(utils.BLUE_OF_THE_WEEK.replace("#", "0x"), 16),
                         timestamp=datetime.utcnow())
         
         choices = await self.get_votes()
         self.nominations = choices
 
-        fields = [("Options", "\n".join([f"{choice}" for choice in choices]), False),
+        # check if the emoji already exists in the guild
+        # if not, create it
+        # Store the emoji name and id in a dictionary
+        for choice in choices:
+            emoji = await self.check_emoji(choice)
+            if not emoji:
+                emoji = await self.post_emoji(choice, self.api_url + choice[1:] + "/100x100.png")
+                self.emojis[emoji.name] = emoji.id
+            else:
+                print(f"Found emoji {emoji.name}")
+                self.emojis[emoji.name] = emoji.id
+
+        fields = [("Options", "\n".join([f"<:{choice[1:]}:{self.emojis[choice[1:]]}>  {choice}" for choice in choices]), False),
                     ("Instructions", "React to cast a vote!", False)]
 
         for name, value, inline in fields:
             embed.add_field(name=name, value=value, inline=inline)
 
         message = await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
-        await time.sleep(60) # prevent double posting of poll
+        self.active_poll_id = message.id
+        time.sleep(60) # prevent double posting of poll
 
-        # add a reaction to the message for each choice
-        # check if the emoji already exists in the guild
-        # if not, create it
-        # add the emoji to the message
-        for choice in choices:
+        # add the emoji reactions to the poll message
+        for choice in self.nominations:
             emoji = await self.check_emoji(choice)
-            if not emoji:
-                emoji = await self.post_emoji(choice, self.api_url + choice[1:] + "/100x100.png")
-            else:
-                print(f"Found emoji {emoji.name}")
             if emoji:
                 await message.add_reaction(emoji)
-                self.active_poll_id = message.id
 
 
     # a function to create an emoji and post it to the discord guild
@@ -100,7 +102,7 @@ class Poll:
             channel = self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID)
             message = await channel.fetch_message(self.active_poll_id)
         except discord.HTTPException as e:
-            print("Unable to fetch message" + e.text + " - " + str(e.code))
+            print("Unable to fetch poll" + e.text + " - " + str(e.code))
             return
         message_id = message.id
         
@@ -113,7 +115,9 @@ class Poll:
 
         await message.delete()
         await self.post_result(top_reaction.emoji.name)
+        
         self.active_poll_id = 0
+        self.emojis = {}
 
 
     async def post_result(self, hex_code):
@@ -126,10 +130,10 @@ class Poll:
         embed.set_author(name="BlueBot", url=utils.LINK_URL + hex_code, icon_url=utils.LINK_URL + hex_code)
         embed.set_footer(text="Brought to you by Deez Nutz")
 
-        BLUE_OF_THE_WEEK = hex_code
+        utils.BLUE_OF_THE_WEEK = hex_code
         try:
             await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
-            await time.sleep(60)
+            time.sleep(60)
         except discord.HTTPException as e:
             print("Unable to post result" + e.text + " - " + str(e.code))
         await self.delete_emojis()
@@ -145,3 +149,4 @@ class Poll:
                 except discord.HTTPException as e:
                     print("Unable to delete emoji" + e.text + " - " + str(e.code))
                 print(f"Deleted emoji {emoji.name}")
+        self.nominations = []
