@@ -12,7 +12,7 @@ BOT_CHANNEL_ID = int(os.getenv("POLL_CHANNEL_ID"))
 if os.getenv("BOTW") != None:
     BLUE_OF_THE_WEEK = os.getenv("BOTW")
 else:
-    BLUE_OF_THE_WEEK = "#0000FF" # Variable, but too important to be lower case
+    BLUE_OF_THE_WEEK = "#0000FF"
 
 # Define the regular expression pattern to match hexadecimal color codes
 hex_pattern = re.compile(r"#[0-9A-Fa-f]{6}")
