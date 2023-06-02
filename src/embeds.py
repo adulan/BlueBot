@@ -12,7 +12,7 @@ class Embeds:
         self.description = self.color
         self.image = utils.COLOR_IMG_API_URL + self.color[1:] + "/400x400"
         self.author = "BlueBot"
-        self.footer = "Brought to you by Deez Nutz"
+        self.footer = "Brought to you by Deeez Nutz"
         
 
     # A function that makes an API cann to thecolorapi.com to get the color information
