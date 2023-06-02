@@ -27,7 +27,7 @@ class Poll:
             embed.add_field(name=name, value=value, inline=inline)
 
         message = await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
-        await time.sleep(60) # prevent double posting of poll
+        time.sleep(60) # prevent double posting of poll
 
         # add a reaction to the message for each choice
         # check if the emoji already exists in the guild
@@ -125,7 +125,7 @@ class Poll:
         utils.BLUE_OF_THE_WEEK = hex_code
         try:
             await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
-            await time.sleep(60)
+            time.sleep(60)
         except discord.HTTPException as e:
             print("Unable to post result" + e.text + " - " + str(e.code))
         await self.delete_emojis()
