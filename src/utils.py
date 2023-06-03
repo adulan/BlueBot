@@ -39,7 +39,7 @@ def is_shade_of_blue(hex_code):
     except:
         print("Unable to determine if blue")
         return False
-    return blue > red and blue > green
+    return blue > (red + green)
 
 
 def is_not_blue_message():

@@ -1,6 +1,6 @@
 import discord
 import embeds, utils, polls
-import asyncio, os, datetime
+import os, datetime
 
 # Define the Discord client with intents
 intents = discord.Intents.default()
@@ -25,6 +25,17 @@ async def on_message(message):
     # Ignore messages sent by the bot itself
     if message.author == client.user:
         return
+
+    # Check if the message is a command
+    if message.content.startswith("!"):
+        # Check if the command is asking for the blue of the week
+        if message.content.startswith("!blue") or message.content.startswith("!botw"):
+            try:
+                # Send an embeded message with the current blue of the week
+                embedded_message = embeds.Embeds(utils.BLUE_OF_THE_WEEK).get_embed()
+                await message.channel.send(embed = embedded_message)
+            except:
+                print("Error retrieving blue of the week")
 
     # Find all hexadecimal color codes in the message
     hex_codes = utils.hex_pattern.findall(message.content)
