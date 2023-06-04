@@ -1,0 +1,10 @@
+version: "3"
+services:
+  bluebot:
+    image: ghcr.io/adulan/bluebot:latest
+    restart: unless-stopped
+    environment:
+      DISCORD_TOKEN="YOUR_TOKEN"
+      GUILD_ID=1234567890
+      POLL_CHANNEL_ID=0987654321
+      BOTW=#573EAF
