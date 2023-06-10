@@ -61,7 +61,7 @@ class Poll:
                 print("Unable to create emoji" + e.text + " - " + str(e.code))
                 return False
             image.close() 
-            print(emoji)
+            # print(emoji)
             print(f"Created new emoji {emoji.name}")
         except discord.HTTPException as e:
             print("Unable to create emoji" + e.text + " - " + str(e.code))
@@ -130,7 +130,7 @@ class Poll:
         embed.set_author(name="BlueBot", url=utils.LINK_URL + hex_code, icon_url=utils.LINK_URL + hex_code)
         embed.set_footer(text="Brought to you by Deez Nutz")
 
-        utils.BLUE_OF_THE_WEEK = hex_code
+        utils.BLUE_OF_THE_WEEK = "#" + hex_code
         try:
             await self.client.get_guild(utils.GUILD_ID).get_channel(utils.BOT_CHANNEL_ID).send(embed=embed)
             time.sleep(60)
@@ -143,10 +143,10 @@ class Poll:
     async def delete_emojis(self):
         guild = self.client.get_guild(utils.GUILD_ID)
         for emoji in guild.emojis:
-            if "#"+emoji.name in self.nominations:
+            if "#"+emoji.name in self.nominations and "#"+emoji.name != utils.BLUE_OF_THE_WEEK:
                 try:
                     await emoji.delete()
+                    print(f"Deleted emoji {emoji.name}")
                 except discord.HTTPException as e:
                     print("Unable to delete emoji" + e.text + " - " + str(e.code))
-                print(f"Deleted emoji {emoji.name}")
         self.nominations = []
