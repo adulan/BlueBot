@@ -1,4 +1,4 @@
-import os, random, re
+import colorsys, os, random, re
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
@@ -32,14 +32,56 @@ def is_shade_of_blue(hex_code):
         hex_code = hex_code[1:]
     elif hex_code[:2] == "0x":
         hex_code = hex_code[2:]
+    else:
+        print("Invalid hex code")
+        return False
 
     # Convert hex code to RGB values
     try:
         red, green, blue = tuple(int(hex_code[i:i+2], 16) for i in (0, 2, 4))
+        r = red / 255.0
+        g = green / 255.0
+        b = blue / 255.0
+        
+        # Convert RGB values to HLS values
+        h, l, s = colorsys.rgb_to_hls(r, g, b)
+        hue = int(round(h * 360))
+        lightness = int(round(l * 100))
+        saturation = int(round(s * 100))
+
+        # Define the minimum and maximum lightness and saturation values for each hue
+        min_lightness = 30
+        max_lightness = 90
+        min_saturation = 45
+        max_saturation = 100
+
+        if hue < 175 or hue > 250:
+            return False
+        elif hue <= 180:
+            min_lightness = 50
+            max_lightness = 90
+            min_saturation = 50
+            max_saturation = 100
+        elif hue <= 200:
+            min_lightness = 30
+            max_lightness = 90
+            min_saturation = 45
+            max_saturation = 100
+        elif hue <= 225:
+            min_lightness = 35
+            max_lightness = 90
+            min_saturation = 50
+            max_saturation = 100
+        elif hue <= 250:
+            min_lightness = 40
+            max_lightness = 80
+            min_saturation = 65
+            max_saturation = 100
+
     except:
         print("Unable to determine if blue")
         return False
-    return blue > (red + green)
+    return (min_lightness <= lightness <= max_lightness) and (min_saturation <= saturation <= max_saturation)
 
 
 def is_not_blue_message():
