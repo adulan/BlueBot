@@ -1,6 +1,6 @@
 # Blue Bot
 
-Blue bot is made for discord and conducts polls to determine a Blue of the Week and prints a color swatch for any hex code posted that is a shade of blue.
+Blue Bot is made for Discord and conducts polls to determine a Blue of the Week and prints a color swatch for any hex code posted that is a shade of blue.
 
 ## Discord Permissions
 
